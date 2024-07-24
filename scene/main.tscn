@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://curckolm5pygt"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_uvuay"]
+[ext_resource type="PackedScene" uid="uid://by5rumcda4y12" path="res://scene/player.tscn" id="2_hkgq4"]
+[ext_resource type="PackedScene" uid="uid://drdiag7oy1y1" path="res://scene/killzone.tscn" id="3_nf43l"]
+[ext_resource type="Script" path="res://scripts/killzone.gd" id="4_j7y86"]
+[ext_resource type="Texture2D" uid="uid://bk58yunmttmio" path="res://assets/asset ( background v3 ).png" id="5_ohy08"]
+[ext_resource type="FontFile" uid="uid://duwe7qmm3u6al" path="res://assets/fonts/PixelOperator8.ttf" id="6_qq03s"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o7twf"]
+distance = -793.0
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_uvuay")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1041, 662.5)
+scale = Vector2(1.29875, 1.30176)
+texture = ExtResource("5_ohy08")
+
+[node name="player" parent="." instance=ExtResource("2_hkgq4")]
+position = Vector2(37, 269)
+
+[node name="Killzone" parent="." instance=ExtResource("3_nf43l")]
+script = ExtResource("4_j7y86")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(3, 226)
+shape = SubResource("WorldBoundaryShape2D_o7twf")
+
+[node name="PipeSpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="Score" type="TextEdit" parent="."]
+offset_left = 39.0
+offset_top = 30.0
+offset_right = 81.0
+offset_bottom = 82.0
+theme_override_fonts/font = ExtResource("6_qq03s")
+theme_override_font_sizes/font_size = 39
+text = "0"
+
+[connection signal="body_entered" from="Killzone" to="." method="_on_killzone_body_entered"]
+[connection signal="body_entered" from="Killzone" to="Killzone" method="_on_body_entered"]
+[connection signal="body_exited" from="Killzone" to="." method="_on_killzone_body_exited"]
+[connection signal="body_exited" from="Killzone" to="Killzone" method="_on_body_exited"]
+[connection signal="child_entered_tree" from="Killzone/CollisionShape2D" to="." method="_on_collision_shape_2d_child_entered_tree"]
